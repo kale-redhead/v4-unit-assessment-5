@@ -3,7 +3,7 @@ const express = require('express'),
       userCtrl = require('./controllers/user'),
       postCtrl = require('./controllers/posts')
 const massive = require('massive')
-
+const session = require('express-session')
 
 const app = express();
 
@@ -18,6 +18,15 @@ massive({
         console.log('db connected')
     })
     .catch(err => console.log(err));
+
+app.use(
+    session({
+        secret: SESSION_SECRET,
+        resave: true,
+        saveUninitialized: false,
+        cookie: maxAge
+    })
+);
 
 //Auth Endpoints
 app.post('/api/auth/register', userCtrl.register);
